@@ -44,3 +44,44 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("GET error as bad request for /api/articles/:article_id", () => {
+    return request(app)
+      .get("/api/articles/:article_id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
+  test("GET error if article id not present", () => {
+    return request(app)
+      .get("/api/articles/999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          status: 404,
+          msg: "Id not found",
+        });
+      });
+  });
+  test("GET article object for /api/articles/6", () => {
+    return request(app)
+      .get("/api/articles/6")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toEqual({
+          author: "sam",
+          title: "A",
+          article_id: 6,
+          body: "Delicious tin of cat food",
+          topic: "mitch",
+          created_at: "2020-10-18T01:00:00.000Z",
+          votes: 0,
+        });
+      });
+  });
+});
