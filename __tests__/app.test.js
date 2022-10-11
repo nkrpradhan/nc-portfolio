@@ -204,4 +204,24 @@ describe("GET /api/articles", () => {
         });
       });
   });
+  test("Get the articles respone in desc order sorted by date", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSorted({ key: "created_at", descending: true });
+      });
+  });
+  test("Bad request", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        articles.forEach((article) => {
+          expect(article.topic).toBe("cats");
+        });
+      });
+  });
 });
