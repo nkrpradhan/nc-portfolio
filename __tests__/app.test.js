@@ -80,6 +80,7 @@ describe("GET /api/articles/:article_id", () => {
           topic: "mitch",
           created_at: "2020-10-18T01:00:00.000Z",
           votes: 0,
+          comment_count: 1,
         });
       });
   });
