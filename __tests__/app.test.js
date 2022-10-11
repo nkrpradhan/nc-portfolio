@@ -118,3 +118,68 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("Bad request check", () => {
+    const reqObj = { inc_votes: "e1" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(reqObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
+  test("Check for id not present", () => {
+    const reqObj = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/articles/3331")
+      .send(reqObj)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Id not found",
+        });
+      });
+  });
+  test("Increase the vote count by 2 for id 1", () => {
+    const reqObj = { inc_votes: 2 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(reqObj)
+      .expect(201)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toEqual({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 102,
+        });
+      });
+  });
+  test("Decrease the vote count by 10 for id 1", () => {
+    const reqObj = { inc_votes: -10 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(reqObj)
+      .expect(201)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toEqual({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 92,
+        });
+      });
+  });
+});
