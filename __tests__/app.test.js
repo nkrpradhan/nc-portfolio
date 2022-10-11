@@ -62,7 +62,6 @@ describe("GET /api/articles/:article_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body).toEqual({
-          status: 404,
           msg: "Id not found",
         });
       });
@@ -82,6 +81,40 @@ describe("GET /api/articles/:article_id", () => {
           created_at: "2020-10-18T01:00:00.000Z",
           votes: 0,
         });
+      });
+  });
+});
+
+describe("GET /api/users", () => {
+  test("GET the response of api/users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
+  });
+
+  test("GET the value of a user from api/users and compare with the expected value", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        const expected = {
+          username: "butter_bridge",
+          name: "jonny",
+          avatar_url:
+            "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+        };
+        expect(users[0]).toEqual(expected);
       });
   });
 });
