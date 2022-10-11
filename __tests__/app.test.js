@@ -102,4 +102,20 @@ describe("GET /api/users", () => {
         });
       });
   });
+
+  test("GET the value of a user from api/users and compare with the expected value", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        const expected = {
+          username: "butter_bridge",
+          name: "jonny",
+          avatar_url:
+            "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+        };
+        expect(users[0]).toEqual(expected);
+      });
+  });
 });

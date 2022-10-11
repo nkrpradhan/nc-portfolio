@@ -3,6 +3,11 @@ const app = express();
 const { getTopics } = require("./controllers/topics.controllers");
 const { getArticlesByID } = require("./controllers/articles.controllers");
 const { getUsers } = require("./controllers/users.controllers");
+const {
+  handleDBErrors,
+  handleCustomErrors,
+  handleInternalErrors,
+} = require("./controllers/errors.controllers");
 
 app.get("/api/topics", getTopics);
 
@@ -14,25 +19,10 @@ app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Route Not Found" });
 });
 
-//DB errors
-app.use((err, req, res, next) => {
-  if (err.code === "22P02") {
-    res.status(400).send({ msg: "Bad Request" });
-  } else {
-    next(err);
-  }
-});
+app.use(handleDBErrors);
 
-app.use((err, req, res, next) => {
-  if (err.status === 404) {
-    res.status(404).send(err);
-  } else {
-    next(err);
-  }
-});
+app.use(handleCustomErrors);
 
-app.use((err, req, res, next) => {
-  res.status(500).send({ err });
-});
+app.use(handleInternalErrors);
 
 module.exports = app;
