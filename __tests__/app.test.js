@@ -62,7 +62,6 @@ describe("GET /api/articles/:article_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body).toEqual({
-          status: 404,
           msg: "Id not found",
         });
       });
