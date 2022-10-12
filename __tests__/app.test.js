@@ -185,7 +185,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("GET /api/articles", () => {
+describe("GET /api/articles with comment count", () => {
   test("GET response object from the api/articles", () => {
     return request(app)
       .get("/api/articles")
