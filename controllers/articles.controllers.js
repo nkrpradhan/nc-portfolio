@@ -1,7 +1,15 @@
 const {
+  selectArticles,
   selectArticlesByID,
   updateArticleDataByID,
 } = require("../models/articles.models");
+
+const getArticles = (req, res, next) => {
+  const { topic } = req.query;
+  selectArticles(topic)
+    .then((articles) => res.send({ articles }))
+    .catch((err) => next(err));
+};
 
 const getArticlesByID = (req, res, next) => {
   const { article_id } = req.params;
@@ -22,4 +30,4 @@ const updateArticlesByID = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-module.exports = { getArticlesByID, updateArticlesByID };
+module.exports = { getArticles, getArticlesByID, updateArticlesByID };
