@@ -242,6 +242,15 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
+  test("GET Status 200 with the most recent comments for the article id 1", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSorted({ key: "comment_id", descending: true });
+      });
+  });
 
   test("GET Status 404 if article id not present", () => {
     return request(app)
