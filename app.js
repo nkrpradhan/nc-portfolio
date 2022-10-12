@@ -1,12 +1,23 @@
 const express = require("express");
 const app = express();
+
+//Topics controllers
 const { getTopics } = require("./controllers/topics.controllers");
+
+//Articles controllers
 const {
   getArticles,
   getArticlesByID,
   updateArticlesByID,
 } = require("./controllers/articles.controllers");
+
+//Comments controllers
+const {
+  getCommentsByArticleID,
+} = require("./controllers/comments.controllers");
 const { getUsers } = require("./controllers/users.controllers");
+
+//Error controllers
 const {
   handleDBErrors,
   handleCustomErrors,
@@ -20,6 +31,7 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticlesByID);
+app.get("/api/articles/:article_id/comments", getCommentsByArticleID);
 
 app.get("/api/users", getUsers);
 

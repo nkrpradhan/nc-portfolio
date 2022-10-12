@@ -35,7 +35,12 @@ exports.selectArticles = (topic) => {
 exports.selectArticlesByID = (article_id) => {
   return db
     .query(
-      `select u.name as author, ar.title, ar.article_id, ar.body, ar.topic, ar.created_at, ar.votes,count(c.*) ::INT as comment_count from articles ar join users u on ar.author=u.username join comments c on ar.article_id=c.article_id where ar.article_id=$1 group by u.name, ar.title, ar.article_id, ar.body, ar.topic, ar.created_at, ar.votes
+      `SELECT u.name AS author, ar.title, ar.article_id, ar.body, ar.topic, ar.created_at, ar.votes,count(c.*) ::INT AS comment_count 
+      FROM articles ar LEFT JOIN users u 
+      ON ar.author=u.username LEFT JOIN comments c 
+      ON ar.article_id=c.article_id 
+      WHERE ar.article_id=$1 
+      GROUP BY u.name, ar.title, ar.article_id, ar.body, ar.topic, ar.created_at, ar.votes
       `,
       [article_id]
     )
