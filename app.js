@@ -28,7 +28,12 @@ const {
   handleInternalErrors,
 } = require("./controllers/errors.controllers");
 
+//Endpoint controllers
+const { getAllEndpoints } = require("./controllers/endpoints.controllers");
+
 app.use(express.json());
+
+app.get("/api", getAllEndpoints);
 
 app.get("/api/topics", getTopics);
 

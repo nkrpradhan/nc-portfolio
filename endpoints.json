@@ -11,17 +11,105 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": [
+      {
+        "sort_by": [
+          "comment_count",
+          "created_at",
+          "topic",
+          "article_id",
+          "title",
+          "author",
+          "votes"
+        ]
+      },
+      "topic",
+      { "order": ["asc", "desc"] }
+    ],
     "exampleResponse": {
       "articles": [
         {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
+          "author": "sam",
+          "title": "Eight pug gifs that remind me of mitch",
+          "article_id": 3,
+          "topic": "mitch",
+          "created_at": "2020-11-03T09:12:00.000Z",
+          "votes": 0,
+          "comment_count": 2
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an array of all articles with the comment count",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "author": "jonny",
+        "title": "Living in the shadow of a great man",
+        "article_id": 1,
+        "body": "I find this existence challenging",
+        "topic": "mitch",
+        "created_at": "2020-07-09T20:11:00.000Z",
+        "votes": 92,
+        "comment_count": 13
+      }
+    }
+  },
+
+  "GET /api/users": {
+    "description": "serves an array of all users with username, name and avatar url",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "This api is to update the vote in the article with article id",
+    "queries": [],
+    "exampleRequest": {
+      "inc_votes": 2
+    },
+    "exampleResponse": {
+      "article": {
+        "article_id": 1,
+        "title": "Living in the shadow of a great man",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "I find this existence challenging",
+        "created_at": "2020-07-09T20:11:00.000Z",
+        "votes": 102
+      }
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "This api is to post a new comment",
+    "queries": [],
+    "exampleRequest": {
+      "body": "Post test",
+      "user": "icellusedkars"
+    },
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 21,
+        "body": "Post test",
+        "article_id": 1,
+        "author": "icellusedkars",
+        "votes": 0,
+        "created_at": "2022-10-13T14:53:54.750Z"
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "This api is to delete a comment with comment id",
+    "queries": [],
+    "exampleRequest": {},
+    "exampleResponse": {}
   }
 }
