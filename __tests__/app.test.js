@@ -12,6 +12,27 @@ beforeAll(() => {
   return seed(testData);
 });
 
+describe("GET /api", () => {
+  test("Get the details of endpoint  ", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        const { availableEndpoints } = body;
+        expect(JSON.parse(availableEndpoints)).toEqual(
+          expect.objectContaining({
+            "GET /api/topics": {
+              description: "serves an array of all topics",
+              queries: [],
+              exampleResponse: {
+                topics: [{ slug: "football", description: "Footie!" }],
+              },
+            },
+          })
+        );
+      });
+  });
+});
 describe("GET /api/topics", () => {
   test("Get error for invalid route", () => {
     return request(app)
