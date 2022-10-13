@@ -273,3 +273,45 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("Bad Request check", () => {
+    const commentsObj = {
+      body: "Post test",
+      user: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(commentsObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
+
+  test("Post a comment and get the posted comment", () => {
+    const commentsObj = {
+      body: "Post test",
+      username: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(commentsObj)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: 1,
+            body: "Post test",
+            author: "icellusedkars",
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+});
