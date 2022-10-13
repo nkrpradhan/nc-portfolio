@@ -48,3 +48,14 @@ exports.insertCommentsByArticleID = ({ article_id, username, body }) => {
     })
     .catch((err) => Promise.reject(err));
 };
+
+exports.deleteCommentDataByID = (comment_id) => {
+  const deleteQuery = `DELETE FROM comments where comment_id=$1 returning *`;
+  return db
+    .query(deleteQuery, [comment_id])
+    .then(({ rows: [comment] }) =>
+      comment !== undefined
+        ? comment
+        : Promise.reject({ status: 404, msg: "Comment Id not found" })
+    );
+};

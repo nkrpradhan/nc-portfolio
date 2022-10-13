@@ -430,3 +430,31 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("Bad Request: Get error if the comment id is not valid", () => {
+    return request(app)
+      .delete("/api/comments/wwww")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
+
+  test("Get error if the comment id is not present", () => {
+    return request(app)
+      .delete("/api/comments/12222")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Comment Id not found",
+        });
+      });
+  });
+
+  test("Delete the comment if the comment id is present", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+});
