@@ -204,7 +204,7 @@ describe("GET /api/articles with comment count", () => {
         });
       });
   });
-  test("Get the articles respone in desc order sorted by date", () => {
+  test("Get the articles response in desc order as default sorted by created date as default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -213,6 +213,7 @@ describe("GET /api/articles with comment count", () => {
         expect(articles).toBeSorted({ key: "created_at", descending: true });
       });
   });
+
   test("Bad request", () => {
     return request(app)
       .get("/api/articles?topic=cats")
@@ -221,6 +222,47 @@ describe("GET /api/articles with comment count", () => {
         const { articles } = body;
         articles.forEach((article) => {
           expect(article.topic).toBe("cats");
+        });
+      });
+  });
+
+  test("Get the articles respone in desc order as default sorted by comment_count", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSorted({ key: "comment_count", descending: true });
+      });
+  });
+
+  test("Get the articles respone in asc order sorted by title", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSorted({ key: "title", descending: false });
+      });
+  });
+
+  test("Check for invalid column in sort by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=id&order=asc")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Invalid sort query",
+        });
+      });
+  });
+  test("Check for invalid column in sort by query", () => {
+    return request(app)
+      .get("/api/articles?order=wqasc")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Invalid order query",
         });
       });
   });
