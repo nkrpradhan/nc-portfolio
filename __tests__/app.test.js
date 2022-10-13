@@ -19,7 +19,7 @@ describe("GET /api", () => {
       .expect(200)
       .then(({ body }) => {
         const { availableEndpoints } = body;
-        expect(JSON.parse(availableEndpoints)).toEqual(
+        expect(availableEndpoints).toEqual(
           expect.objectContaining({
             "GET /api/topics": {
               description: "serves an array of all topics",
