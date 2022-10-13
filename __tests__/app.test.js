@@ -225,3 +225,51 @@ describe("GET /api/articles with comment count", () => {
       });
   });
 });
+describe("GET /api/articles/:article_id/comments", () => {
+  test("GET Status 200 with the comments response for the article id 1", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+      });
+  });
+  test("GET Status 200 with the most recent comments for the article id 1", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSorted({ key: "comment_id", descending: true });
+      });
+  });
+
+  test("GET Status 404 if article id not present", () => {
+    return request(app)
+      .get("/api/articles/1222/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Id not found",
+        });
+      });
+  });
+  test("GET Status 404 if comments not present for the article", () => {
+    return request(app)
+      .get("/api/articles/13/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Comments not present for the article",
+        });
+      });
+  });
+});

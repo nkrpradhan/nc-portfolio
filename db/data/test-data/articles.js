@@ -95,4 +95,12 @@ module.exports = [
     created_at: 1602419040000,
     votes: 0,
   },
+  {
+    title: "Test title",
+    topic: "mitch",
+    author: "butter_bridge",
+    body: "Check for comments not present",
+    created_at: 1602419050005,
+    votes: 0,
+  },
 ];

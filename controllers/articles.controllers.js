@@ -1,6 +1,7 @@
 const {
   selectArticles,
   selectArticlesByID,
+  selectCommentsByArticleID,
   updateArticleDataByID,
 } = require("../models/articles.models");
 
@@ -30,4 +31,8 @@ const updateArticlesByID = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-module.exports = { getArticles, getArticlesByID, updateArticlesByID };
+module.exports = {
+  getArticles,
+  getArticlesByID,
+  updateArticlesByID,
+};
