@@ -62,7 +62,7 @@ describe("GET /api/articles/:article_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body).toEqual({
-          msg: "Id not found",
+          msg: "Article Id not found",
         });
       });
   });
@@ -133,7 +133,7 @@ describe("PATCH /api/articles/:article_id", () => {
         });
       });
   });
-  test("Check for id not present", () => {
+  test("Check for article id not present", () => {
     const reqObj = { inc_votes: 1 };
     return request(app)
       .patch("/api/articles/3331")
@@ -141,7 +141,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body).toEqual({
-          msg: "Id not found",
+          msg: "Article Id not found",
         });
       });
   });
@@ -300,7 +300,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body).toEqual({
-          msg: "Id not found",
+          msg: "Article Id not found",
         });
       });
   });
@@ -312,6 +312,121 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body).toEqual({
           msg: "Comments not present for the article",
         });
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("Bad Request check", () => {
+    const commentsObj = {
+      body: "Post test",
+      user: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(commentsObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
+
+  test("Post a comment and get the posted comment", () => {
+    const commentsObj = {
+      body: "Post test",
+      username: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(commentsObj)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: 1,
+            body: "Post test",
+            author: "icellusedkars",
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+  test("Check for nonexistent article id", () => {
+    const commentsObj = {
+      body: "Post test",
+      username: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1222/comments")
+      .send(commentsObj)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Article Id not found",
+        });
+      });
+  });
+
+  test("Check for invalid article id", () => {
+    const commentsObj = {
+      body: "Post test",
+      username: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/eee/comments")
+      .send(commentsObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
+
+  test("Check for nonexistent user id", () => {
+    const commentsObj = {
+      body: "Post test",
+      username: "icellused",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(commentsObj)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "User Id not found",
+        });
+      });
+  });
+
+  test("Ignores request property not present in comment table", () => {
+    const commentsObj = {
+      body: "Property test",
+      username: "icellusedkars",
+      testprop: "hello",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(commentsObj)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: 1,
+            body: "Property test",
+            author: "icellusedkars",
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+          })
+        );
+        expect(comment).not.toHaveProperty("testprop");
       });
   });
 });

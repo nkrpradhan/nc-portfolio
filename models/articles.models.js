@@ -65,7 +65,7 @@ exports.selectArticlesByID = (article_id) => {
     .then(({ rows: [article] }) =>
       article !== undefined
         ? article
-        : Promise.reject({ status: 404, msg: "Id not found" })
+        : Promise.reject({ status: 404, msg: "Article Id not found" })
     );
 };
 
@@ -78,6 +78,6 @@ exports.updateArticleDataByID = ({ inc_votes, article_id }) => {
     .then(({ rows: [article] }) =>
       article !== undefined
         ? article
-        : Promise.reject({ status: 404, msg: "Id not found" })
+        : Promise.reject({ status: 404, msg: "Article Id not found" })
     );
 };
