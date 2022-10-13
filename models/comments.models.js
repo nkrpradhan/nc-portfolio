@@ -1,5 +1,7 @@
 const db = require("../db/connection");
 const { selectArticlesByID } = require("./articles.models");
+const { selectUserByName } = require("./users.models");
+
 exports.selectCommentsByArticleID = (article_id) => {
   const articlePromise = selectArticlesByID(article_id);
   return articlePromise
@@ -31,12 +33,18 @@ exports.insertCommentsByArticleID = ({ article_id, username, body }) => {
   ) {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
-  return db
-    .query(
-      `INSERT INTO comments 
+
+  return selectArticlesByID(article_id)
+    .then(() => selectUserByName(username))
+    .then(() => {
+      return db
+        .query(
+          `INSERT INTO comments 
     (body, author, article_id) 
     VALUES ($1, $2, $3) RETURNING * `,
-      [body, username, article_id]
-    )
-    .then(({ rows: [comment] }) => comment);
+          [body, username, article_id]
+        )
+        .then(({ rows: [comment] }) => comment);
+    })
+    .catch((err) => Promise.reject(err));
 };
