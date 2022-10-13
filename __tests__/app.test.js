@@ -204,7 +204,7 @@ describe("GET /api/articles with comment count", () => {
         });
       });
   });
-  test("Get the articles respone in desc order as default sorted by created date as default", () => {
+  test("Get the articles response in desc order as default sorted by created date as default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -243,6 +243,27 @@ describe("GET /api/articles with comment count", () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeSorted({ key: "title", descending: false });
+      });
+  });
+
+  test("Check for invalid column in sort by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=id&order=asc")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Invalid sort query",
+        });
+      });
+  });
+  test("Check for invalid column in sort by query", () => {
+    return request(app)
+      .get("/api/articles?order=wqasc")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "Invalid order query",
+        });
       });
   });
 });
