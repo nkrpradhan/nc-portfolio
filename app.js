@@ -14,7 +14,10 @@ const {
 //Comments controllers
 const {
   getCommentsByArticleID,
+  postCommentsByArticleID,
 } = require("./controllers/comments.controllers");
+
+//User controllers
 const { getUsers } = require("./controllers/users.controllers");
 
 //Error controllers
@@ -32,7 +35,7 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticlesByID);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleID);
-
+app.post("/api/articles/:article_id/comments", postCommentsByArticleID);
 app.get("/api/users", getUsers);
 
 app.patch("/api/articles/:article_id", updateArticlesByID);
