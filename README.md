@@ -21,3 +21,9 @@ Test
  - Create a file with name as .env.test similar to .env.development.
  - .env.test is for test. 
  - Enter the name of test database in PGDATABASE.
+
+
+API Link deployed in Heroku
+
+ - Below api will provide all the endpoints 
+https://heroku-be-nc-news.herokuapp.com/api
