@@ -479,3 +479,31 @@ describe("DELETE /api/comments/:comment_id", () => {
     return request(app).delete("/api/comments/1").expect(204);
   });
 });
+
+describe("GET /api/users/:username", () => {
+  test("Check for user id not present", () => {
+    return request(app)
+      .get("/api/users/ere")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "User Id not found",
+        });
+      });
+  });
+
+  test("Check for user id present and user response", () => {
+    return request(app)
+      .get("/api/users/butter_bridge")
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).toEqual({
+          username: "butter_bridge",
+          name: "jonny",
+          avatar_url:
+            "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+        });
+      });
+  });
+});
