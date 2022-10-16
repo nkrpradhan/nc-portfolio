@@ -17,9 +17,13 @@ const {
 
 articleRouter.get("/", getArticles);
 
-articleRouter.get("/:article_id", getArticlesByID);
-articleRouter.get("/:article_id/comments", getCommentsByArticleID);
-articleRouter.post("/:article_id/comments", postCommentsByArticleID);
-articleRouter.patch("/:article_id", updateArticlesByID);
+articleRouter
+  .route("/:article_id")
+  .get(getArticlesByID)
+  .patch(updateArticlesByID);
+articleRouter
+  .route("/:article_id/comments")
+  .get(getCommentsByArticleID)
+  .post(postCommentsByArticleID);
 
 module.exports = articleRouter;
