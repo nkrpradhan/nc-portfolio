@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+const cors = require("cors");
 //Routers
 const apiRouter = require("./routes/api-router");
 
@@ -12,6 +12,7 @@ const {
 } = require("./controllers/errors.controllers");
 
 app.use(express.json());
+app.use(cors());
 
 app.use("/api", apiRouter);
 
