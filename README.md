@@ -26,4 +26,4 @@ Test
 API Link deployed in Heroku
 
  - Below api will provide all the endpoints 
-https://heroku-be-nc-news.herokuapp.com/api
+https://ivory-deer-tutu.cyclic.app/api
